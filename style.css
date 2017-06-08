@@ -8,13 +8,21 @@ body {
 }
 
 body {
-  background: #f3f3f3;
+  background-color: #f3f3f3;
   box-sizing: border-box;
   color: rgba(0, 0, 0, 0.8);
-  font-family: 'Open Sans', 'Segoe UI', Arial, Helvetica, sans-serif;
+  font-family: 'Open Sans', 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
   font-weight: 300;
   line-height: 1.5;
   margin: 0;
+}
+
+input,
+button {
+  border: 0;
+  font-size: inherit;
+  font-weight: inherit;
+  padding: 0.5rem;
 }
 
 #app,
@@ -42,12 +50,16 @@ body {
   z-index: 9;
 }
 
-header,
+.modal__header,
 .weather {
   padding: 1rem;
 }
 
-form {
+.modal__header p {
+  margin: 0;
+}
+
+.search-form {
   background-color: #fff;
   border: 1px solid rgba(0, 0, 0, 0.2);
   border-width: 1px 0;
@@ -55,41 +67,37 @@ form {
   padding: 1rem;
 }
 
-input,
-button {
-  border: 0;
+.search-form__field {
   border-bottom: 1px solid rgba(0, 0, 0, 0.2);
-  font-size: 1rem;
-  font-weight: 300;
-  outline: none;
-  padding: 0.5rem;
-  transition: border .3s ease, background .3s ease;
-}
-
-input {
   flex-grow: 1;
+  transition: border .3s ease;
 }
 
-input:focus {
+.search-form__field:focus {
   border-color: #f44336;
+  outline: thin dotted;
 }
 
-button {
+.search-form__btn {
   background-color: #f44336;
   color: rgba(255, 255, 255, 0.8);
   cursor: pointer;
+  transition: background .3s ease;
 }
 
-button:hover,
-button:active {
+.search-form__btn:hover {
   background-color: #d32f2f;
 }
 
-.location {
+.search-form__btn:focus {
+  outline: thin dotted;
+}
+
+.weather__location {
   color: rgba(0, 0, 0, 0.6);
   font-weight: 700;
 }
 
-.description {
+.weather__description {
   text-transform: capitalize;
 }

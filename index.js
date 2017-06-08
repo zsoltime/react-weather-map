@@ -17,14 +17,12 @@ class WeatherApp extends React.Component {
     this.appid = '90304f68a674375d3f1a825bffe6ac05';
     this.apiURL = 'http://api.openweathermap.org/data/2.5/weather';
   }
-  getData(location, lat, lon) {
-    if (location) {
-      return fetch(`${this.apiURL}?q=${location}&APPID=${this.appid}`);
-    }
-    return fetch(`${this.apiURL}?lat=${lat}&lon=${lon}&APPID=${this.appid}`);
-  }
   updatePosition(location, lat, lon) {
-    this.getData(location, lat, lon)
+    const url = location
+      ? `${this.apiURL}?q=${location}&APPID=${this.appid}`
+      : `${this.apiURL}?lat=${lat}&lon=${lon}&APPID=${this.appid}`;
+
+    fetch(url)
     .then(res => res.json())
     .then(res => {
       this.setState({
@@ -50,11 +48,11 @@ class WeatherApp extends React.Component {
     });
     this.marker.setAnimation(google.maps.Animation.DROP);
 
-    google.maps.event.addListener(this.map, 'click', event => {
+    google.maps.event.addListener(this.map, 'click', (event) => {
       const position = event.latLng;
       this.updatePosition(null, position.lat(), position.lng());
     });
-    google.maps.event.addListener(this.marker, 'dragend', event => {
+    google.maps.event.addListener(this.marker, 'dragend', (event) => {
       const position = event.latLng;
       this.updatePosition(null, position.lat(), position.lng());
     });
@@ -93,8 +91,8 @@ class WeatherApp extends React.Component {
     return (
       <div className="container">
         <div className="modal">
-          <header>
-            <span>Enter a place name below. You can also drag the marker or just click on the map.</span>
+          <header className="modal__header">
+            <p>Enter a place name below. You can also drag the marker or just click on the map.</p>
           </header>
           <Form
             onChange={this.onChange}
@@ -122,6 +120,9 @@ class Form extends React.Component {
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
   }
+  componentDidMount() {
+    this.inputRef.focus();
+  }
   onChange(event) {
     this.setState({
       value: event.target.value,
@@ -129,19 +130,23 @@ class Form extends React.Component {
   }
   onSubmit(event) {
     event.preventDefault();
-    setTimeout(() => (this.refs.input.value = ''), 1000);
+    setTimeout(() => (this.inputRef.value = ''), 1000);
     this.props.onSubmit(this.state.value);
   }
   render() {
     return (
-      <form onSubmit={this.onSubmit}>
+      <form className="search-form" onSubmit={this.onSubmit}>
         <input
+          className="search-form__field"
           type="text"
           placeholder="Enter a town or city"
           onChange={this.onChange}
-          ref="input"
+          ref={node => { this.inputRef = node; }}
         />
-        <button type="submit">Search</button>
+        <button
+          className="search-form__btn"
+          type="submit"
+        >Search</button>
       </form>
     );
   }
@@ -154,10 +159,10 @@ Form.propTypes = {
 const WeatherDetails = (props) => {
   return (
     <div className="weather">
-      <div className="location">{props.location}</div>
-      <div className="description">{props.weather}</div>
+      <div className="weather__location">{props.location}</div>
+      <div className="weather__description">{props.weather}</div>
       <Temp temp={props.temp} />
-      <img src={props.icon} />
+      <img className="weather__icon" src={props.icon} />
     </div>
   );
 }
@@ -170,8 +175,10 @@ WeatherDetails.propTypes = {
 };
 
 const Temp = (props) => {
-  const temp = props.temp ? Math.round(props.temp - 273.15) : '-';
-  return <div className="temp">{temp} °C</div>;
+  const temp = props.temp ? Math.round(props.temp - 273.15) : 'N/A';
+  return (
+    <div className="weather__temp">{temp} °C</div>
+  );
 };
 
 Temp.propTypes = {
