@@ -15,7 +15,7 @@ class WeatherApp extends React.Component {
     this.map = null;
     this.marker = null;
     this.appid = '90304f68a674375d3f1a825bffe6ac05';
-    this.apiURL = 'http://api.openweathermap.org/data/2.5/weather';
+    this.apiURL = '//api.openweathermap.org/data/2.5/weather';
   }
   updatePosition(location, lat, lon) {
     const url = location
@@ -31,7 +31,7 @@ class WeatherApp extends React.Component {
         lon: res.coord.lon,
         weather: res.weather[0].description,
         temp: res.main.temp,
-        icon: `http://openweathermap.org/img/w/${res.weather[0].icon}.png`
+        icon: `//openweathermap.org/img/w/${res.weather[0].icon}.png`
       },
       this.updateMap);
     });
@@ -70,10 +70,10 @@ class WeatherApp extends React.Component {
   componentDidMount() {
     this.drawMap();
     // todo: add geolocation API, too
-    fetch('http://ip-api.com/json')
+    fetch('//ipv4.ip.nf/me.json')
     .then(res => res.json())
     .then(res => {
-      this.updatePosition(null, res.lat, res.lon);
+      this.updatePosition(null, res.ip.latitude, res.ip.longitude);
     });
   }
   onChange(event) {
